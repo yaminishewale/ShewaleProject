@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: HRMSProject-deployment
+  labels:
+    app: HRMSProject
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: WebApplication22  
+  template:
+    metadata:
+      labels:
+        app: HRMSProject
+    spec:
+      containers:
+      - name: HMSRegistry
+        image: hmsregistry.azurecr.io/yaminishewalewebapplication:latest
+        ports:
+        - containerPort: 8080
+      imagePullSecrets:
+      - name: webapisvcsecret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: HRMSProjectsvc
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+  selector:
+    app: HRMSProject
